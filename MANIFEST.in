@@ -1,3 +1,3 @@
 include README.md
 include LICENSE
-recursive-include demo1*.py
+recursive-include demo1 *
