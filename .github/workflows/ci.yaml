@@ -78,14 +78,14 @@ jobs:
     #   if: github.event_name == 'push'
     #   run: |
     #      gh release upload ${{ env.RELEASE_NAME }} dist/*.tar.gz dist/*.whl --repo SuhasSahadev/demo1
-     - name: Create GitHub Release
+    - name: Create GitHub Release
       if: github.event_name == 'push'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
          gh release create ${{ env.RELEASE_NAME }} --title "Automated Release ${{ env.RELEASE_DATE }}" --notes "Automated release created on ${{ env.RELEASE_DATE }}" --repo SuhasSahadev/demo1
 
-     - name: Upload Package to GitHub Release
+    - name: Upload Package to GitHub Release
        if: github.event_name == 'push'
        env:
          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
