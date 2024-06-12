@@ -1,7 +1,7 @@
 import pytest
 # import sys
 # sys.path.append('C:\\Desktop\\demo')
-from demo1 import app 
+from app import app 
 
 @pytest.fixture
 def client():
