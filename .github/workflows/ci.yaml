@@ -51,10 +51,30 @@ jobs:
       run: |
         unset GITHUB_TOKEN && echo $GITHUB_TOKEN | gh auth login --with-token
 
-    - name: Create GitHub Release
+    # - name: Create GitHub Release
+    #   run: |
+    #     gh release create v0.1.1 --title "Second Release" --notes "Second release of the demo package" --repo SuhasSahadev/demo1
+
+    # - name: Upload Package to GitHub Release
+    #   run: |
+    #     gh release upload v0.1.1 dist/demo1-0.1.1.tar.gz dist/demo1-0.1.1-py3-none-any.whl --repo SuhasSahadev/demo1
+    - name: Get current date and time
+      if: github.event_name == 'push'
+      id: date
+      run: echo "RELEASE_DATE=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
+    - name: Create dynamic release name
+      if: github.event_name == 'push'
       run: |
-        gh release create v0.1.1 --title "Second Release" --notes "Second release of the demo package" --repo SuhasSahadev/demo1
+        export RELEASE_NAME="release-${{ github.sha }}-${{ env.RELEASE_DATE }}"
+        echo "RELEASE_NAME=${RELEASE_NAME}" >> $GITHUB_ENV
+
+    - name: Create GitHub Release
+      if: github.event_name == 'push'
+      run: |
+        gh release create ${{ env.RELEASE_NAME }} --title "Automated Release ${{ env.RELEASE_DATE }}" --notes "Automated release created on ${{ env.RELEASE_DATE }}" --repo SuhasSahadev/demo1
 
     - name: Upload Package to GitHub Release
+      if: github.event_name == 'push'
       run: |
-        gh release upload v0.1.1 dist/demo1-0.1.1.tar.gz dist/demo1-0.1.1-py3-none-any.whl --repo SuhasSahadev/demo1
+        gh release upload ${{ env.RELEASE_NAME }} dist/demo1-.tar.gz dist/demo1-.whl --repo SuhasSahadev/demo1
